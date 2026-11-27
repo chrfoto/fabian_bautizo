@@ -13,9 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Tone.js para música ambiental suave -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -193,6 +190,11 @@
         <div id="music-waves" class="hidden absolute inset-0 rounded-full border-2 border-gold-400 animate-ping opacity-40"></div>
         <i id="music-icon" data-lucide="volume-x" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
     </button>
+
+    <!-- Audio de Fondo (Hans Zimmer & Richard Harvey - The Fox) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://www.dropbox.com/scl/fi/rgiuf515kyv6pavy5wvbe/Hans-Zimmer-Richard-Harvey-The-Fox-Bande-originale-du-film-Le-Petit-Prince.mp3?rlkey=bcc6u0znbnxhu9e721kq1cy6o&st=z96hikrg&raw=1" type="audio/mpeg">
+    </audio>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-14 relative z-10 space-y-12 sm:space-y-16">
@@ -604,41 +606,11 @@
         lucide.createIcons();
 
         // ==========================================
-        // 1. ENTRADA Y MÚSICA AMBIENTAL (TONE.JS)
+        // 1. ENTRADA Y MÚSICA AMBIENTAL (DROPBOX MP3)
         // ==========================================
         let isPlaying = false;
-        let musicLoop = null;
-        let synth = null;
-
-        function initMusic() {
-            if (synth) return;
-            synth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: "sine" },
-                envelope: { attack: 0.4, decay: 0.8, sustain: 0.3, release: 2.5 }
-            }).toDestination();
-            synth.volume.value = -14;
-
-            // Melodía suave estilo caja de música / cuento de estrellas
-            const notes = [
-                { time: "0:0", note: "E5", dur: "4n" },
-                { time: "0:1", note: "G5", dur: "4n" },
-                { time: "0:2", note: "B5", dur: "2n" },
-                { time: "1:0", note: "A5", dur: "4n" },
-                { time: "1:1", note: "G5", dur: "4n" },
-                { time: "1:2", note: "E5", dur: "2n" },
-                { time: "2:0", note: "D5", dur: "4n" },
-                { time: "2:1", note: "F#5", dur: "4n" },
-                { time: "2:2", note: "A5", dur: "2n" },
-                { time: "3:0", note: "G5", dur: "2n" },
-                { time: "3:2", note: "B4", dur: "2n" }
-            ];
-
-            musicLoop = new Tone.Part((time, val) => {
-                synth.triggerAttackRelease(val.note, val.dur, time);
-            }, notes);
-            musicLoop.loop = true;
-            musicLoop.loopEnd = "4m";
-        }
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.volume = 0.65;
 
         async function enterInvitation() {
             const overlay = document.getElementById('welcome-overlay');
@@ -646,11 +618,7 @@
             setTimeout(() => overlay.style.display = 'none', 700);
             
             try {
-                await Tone.start();
-                initMusic();
-                Tone.Transport.bpm.value = 78;
-                Tone.Transport.start();
-                musicLoop.start(0);
+                await bgMusic.play();
                 isPlaying = true;
                 updateMusicUI();
             } catch (e) {
@@ -661,20 +629,16 @@
 
         async function toggleMusic() {
             try {
-                await Tone.start();
-                initMusic();
-                if (!isPlaying) {
-                    Tone.Transport.bpm.value = 78;
-                    Tone.Transport.start();
-                    musicLoop.start(0);
+                if (bgMusic.paused) {
+                    await bgMusic.play();
                     isPlaying = true;
                 } else {
-                    Tone.Transport.pause();
+                    bgMusic.pause();
                     isPlaying = false;
                 }
                 updateMusicUI();
             } catch (e) {
-                console.error(e);
+                console.error("Error al reproducir el audio:", e);
             }
         }
 
