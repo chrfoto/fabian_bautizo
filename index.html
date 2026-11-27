@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bautizo de Rodrigo Fabián | Invitación Digital</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cinzel, Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tone.js para música ambiental suave -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FFFDF9',
+                            100: '#FDF8EE',
+                            200: '#F7EEDB',
+                        },
+                        gold: {
+                            300: '#F3E5AB',
+                            400: '#E5C158',
+                            500: '#D4AF37',
+                            600: '#B59024',
+                            700: '#8C6D16',
+                        },
+                        crimson: {
+                            500: '#C82333',
+                            600: '#A71D2A',
+                            700: '#82141E',
+                            800: '#5C0D14',
+                        },
+                        slateprince: {
+                            700: '#334155',
+                            800: '#1E293B',
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        cormorant: ['Cormorant Garamond', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos personalizados para texturas, brillos y animaciones */
+        body {
+            background-color: #FFFDF9;
+            background-image: 
+                radial-gradient(at 15% 15%, rgba(212, 175, 55, 0.08) 0px, transparent 50%),
+                radial-gradient(at 85% 30%, rgba(167, 29, 42, 0.05) 0px, transparent 50%),
+                radial-gradient(at 50% 80%, rgba(212, 175, 55, 0.08) 0px, transparent 50%);
+            overflow-x: hidden;
+        }
+
+        /* Textura sutil de papel acuarela */
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Efecto de brillo dorado en textos */
+        .gold-shimmer {
+            background: linear-gradient(90deg, #B59024 0%, #E5C158 25%, #FFF3B8 50%, #D4AF37 75%, #B59024 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Animación flotante suave para ilustraciones */
+        .float-slow {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        /* Destello de estrellas */
+        .twinkle {
+            animation: twinkleAnim 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkleAnim {
+            0% { opacity: 0.3; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1.15); }
+        }
+
+        /* Tarjeta elegante con borde doble */
+        .royal-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: 0 15px 35px -5px rgba(181, 144, 36, 0.08), 0 5px 15px -3px rgba(167, 29, 42, 0.04);
+        }
+
+        /* Canvas fijo para hojas y brillos que caen */
+        #magic-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        /* Revelado suave al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="paper-texture text-slateprince-800 font-sans antialiased selection:bg-gold-300 selection:text-crimson-800">
+
+    <!-- Canvas de Hojas Cayendo y Brillos Dorados -->
+    <canvas id="magic-canvas"></canvas>
+
+    <!-- Pantalla de Bienvenida / Sobre Digital (Opcional para activar música e inmersión) -->
+    <div id="welcome-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-cream-50/95 backdrop-blur-md transition-opacity duration-700 p-4">
+        <div class="max-w-md w-full royal-card rounded-3xl p-8 text-center relative overflow-hidden">
+            <!-- Decoración esquinas -->
+            <div class="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-gold-500/50 rounded-tl-xl"></div>
+            <div class="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-gold-500/50 rounded-tr-xl"></div>
+            <div class="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-gold-500/50 rounded-bl-xl"></div>
+            <div class="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-gold-500/50 rounded-br-xl"></div>
+
+            <!-- Ilustración SVG Rosa y Estrella -->
+            <div class="w-24 h-24 mx-auto mb-4 float-slow">
+                <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-sm">
+                    <!-- Cúpula de cristal sutil -->
+                    <path d="M30,95 L30,50 C30,25 90,25 90,50 L90,95 Z" fill="rgba(212, 175, 55, 0.08)" stroke="#D4AF37" stroke-width="1.5" stroke-dasharray="3 2"/>
+                    <ellipse cx="60" cy="95" rx="35" ry="5" fill="#D4AF37" opacity="0.4"/>
+                    <!-- Tallo y hojas -->
+                    <path d="M60,92 Q58,72 60,55" stroke="#5B7A53" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M60,78 Q48,74 45,80 Q52,84 60,78" fill="#6D8F64"/>
+                    <path d="M60,70 Q72,65 75,71 Q68,75 60,70" fill="#6D8F64"/>
+                    <!-- Rosa Roja de El Principito -->
+                    <path d="M60,36 C50,36 47,48 53,55 C57,59 63,59 67,55 C73,48 70,36 60,36 Z" fill="#A71D2A"/>
+                    <path d="M54,42 C57,38 63,38 66,42 C68,46 64,52 60,52 C56,52 52,46 54,42 Z" fill="#C82333"/>
+                    <path d="M57,43 Q60,40 63,43 Q61,47 57,43" fill="#E63946"/>
+                    <!-- Estrella dorada -->
+                    <polygon points="88,22 90,28 96,28 91,32 93,38 88,34 83,38 85,32 80,28 86,28" fill="#D4AF37" class="twinkle"/>
+                </svg>
+            </div>
+
+            <p class="font-cinzel text-xs tracking-[0.25em] text-gold-700 uppercase mb-2">Tienes una invitación especial</p>
+            <h2 class="font-cormorant text-3xl sm:text-4xl font-bold text-crimson-700 mb-2">Mi Bautizo</h2>
+            <p class="font-cinzel text-lg text-slateprince-800 font-semibold mb-6">Rodrigo Fabián</p>
+            
+            <p class="font-cormorant italic text-lg text-slateprince-700 mb-8">
+                "Solo con el corazón se puede ver bien; lo esencial es invisible a los ojos."
+            </p>
+
+            <button onclick="enterInvitation()" class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-crimson-700 via-crimson-600 to-crimson-700 text-cream-50 font-cinzel text-sm tracking-widest uppercase shadow-lg shadow-crimson-700/25 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-gold-400/50 cursor-pointer">
+                <i data-lucide="sparkles" class="w-4 h-4 text-gold-300"></i>
+                Abrir Invitación
+            </button>
+        </div>
+    </div>
+
+    <!-- Botón Flotante de Música Ambiental -->
+    <button id="music-toggle" onclick="toggleMusic()" aria-label="Controlar música" class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-gold-500/60 shadow-lg flex items-center justify-center text-crimson-700 hover:bg-gold-50 transition-all cursor-pointer group">
+        <div id="music-waves" class="hidden absolute inset-0 rounded-full border-2 border-gold-400 animate-ping opacity-40"></div>
+        <i id="music-icon" data-lucide="volume-x" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+    </button>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-14 relative z-10 space-y-12 sm:space-y-16">
+
+        <!-- 1. PORTADA HERO & DATOS PRINCIPALES -->
+        <section class="royal-card rounded-[2rem] p-6 sm:p-12 text-center relative overflow-hidden">
+            <!-- Ornamentos superiores -->
+            <div class="flex justify-center items-center gap-3 mb-6">
+                <span class="h-[1px] w-12 sm:w-20 bg-gradient-to-r from-transparent to-gold-500"></span>
+                <svg class="w-6 h-6 text-gold-500 twinkle" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L14.8 8.8L23 9.5L16.8 14.8L18.8 23L12 18.5L5.2 23L7.2 14.8L1 9.5L9.2 8.8L12 1Z"/>
+                </svg>
+                <span class="h-[1px] w-12 sm:w-20 bg-gradient-to-l from-transparent to-gold-500"></span>
+            </div>
+
+            <p class="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-gold-700 uppercase font-semibold mb-3">
+                Con la bendición de Dios
+            </p>
+            
+            <h1 class="font-cormorant text-4xl sm:text-6xl font-bold text-crimson-700 tracking-tight mb-2">
+                Mi Bautizo
+            </h1>
+
+            <!-- Ilustración Central El Principito: Planeta B612, Rosa, Estrella y Zorro minimalista -->
+            <div class="my-6 sm:my-8 relative max-w-[260px] sm:max-w-[300px] mx-auto float-slow">
+                <svg viewBox="0 0 300 220" class="w-full h-auto drop-shadow-md">
+                    <defs>
+                        <radialGradient id="planetGrad" cx="40%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#FDF8EE"/>
+                            <stop offset="65%" stop-color="#E5C158"/>
+                            <stop offset="100%" stop-color="#B59024"/>
+                        </radialGradient>
+                        <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+
+                    <!-- Resplandor detrás del planeta -->
+                    <circle cx="150" cy="135" r="95" fill="url(#glowGrad)"/>
+
+                    <!-- Estrellas decorativas -->
+                    <polygon points="55,40 57,46 63,46 58,50 60,56 55,52 50,56 52,50 47,46 53,46" fill="#D4AF37" class="twinkle"/>
+                    <polygon points="245,55 247,60 252,60 248,63 249,68 245,65 241,68 242,63 238,60 243,60" fill="#D4AF37" class="twinkle" style="animation-delay: 1s;"/>
+                    <circle cx="95" cy="25" r="2.5" fill="#E5C158" class="twinkle" style="animation-delay: 0.5s;"/>
+                    <circle cx="215" cy="30" r="2" fill="#C82333" class="twinkle" style="animation-delay: 1.5s;"/>
+
+                    <!-- Planeta B-612 -->
+                    <circle cx="150" cy="145" r="56" fill="url(#planetGrad)" stroke="#D4AF37" stroke-width="1.5"/>
+                    <!-- Cráteres suaves del planeta -->
+                    <ellipse cx="125" cy="145" rx="10" ry="6" fill="#D4AF37" opacity="0.25"/>
+                    <ellipse cx="172" cy="162" rx="12" ry="7" fill="#B59024" opacity="0.2"/>
+                    <ellipse cx="145" cy="178" rx="8" ry="4" fill="#B59024" opacity="0.2"/>
+
+                    <!-- Volcanes pequeñitos -->
+                    <path d="M108,108 L116,95 L124,108 Z" fill="#C9A236"/>
+                    <path d="M182,112 L189,100 L196,112 Z" fill="#C9A236"/>
+
+                    <!-- La Rosa del Principito arriba del planeta -->
+                    <path d="M150,89 Q148,70 150,55" stroke="#5B7A53" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M150,76 Q140,72 138,77 Q144,81 150,76" fill="#6D8F64"/>
+                    <path d="M150,68 Q160,64 162,69 Q156,73 150,68" fill="#6D8F64"/>
+                    <path d="M150,38 C141,38 138,49 144,55 C147,58 153,58 156,55 C162,49 159,38 150,38 Z" fill="#A71D2A"/>
+                    <path d="M145,43 C148,39 152,39 155,43 C157,47 153,52 150,52 C147,52 143,47 145,43 Z" fill="#C82333"/>
+
+                    <!-- Silueta estilizada del Zorro sentado mirando la rosa -->
+                    <g transform="translate(164, 72) scale(0.75)">
+                        <path d="M12,26 C8,26 6,20 9,14 L7,6 L13,10 L17,6 L16,14 C19,18 18,26 12,26 Z" fill="#D97724"/>
+                        <path d="M16,24 C24,24 28,18 25,14 C22,12 18,16 16,22" fill="#D97724"/>
+                        <circle cx="25" cy="14" r="2.2" fill="#FFFDF9"/>
+                    </g>
+
+                    <!-- Órbita dorada alrededor -->
+                    <ellipse cx="150" cy="145" rx="82" ry="22" transform="rotate(-14 150 145)" fill="none" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 4" opacity="0.65"/>
+                </svg>
+            </div>
+
+            <!-- Nombre del Festejado -->
+            <div class="space-y-2 mb-8">
+                <h2 class="font-cinzel text-2xl sm:text-4xl font-bold gold-shimmer tracking-wide leading-tight">
+                    Rodrigo Fabián<br>Zapién Orozco
+                </h2>
+                <div class="w-24 h-0.5 bg-gradient-to-r from-transparent via-crimson-600 to-transparent mx-auto mt-3"></div>
+            </div>
+
+            <!-- Frase de apertura / Versículo inspirado en El Principito y la Fe -->
+            <blockquote class="max-w-xl mx-auto bg-cream-100/80 border border-gold-400/40 rounded-2xl p-5 sm:p-6 relative">
+                <span class="font-cormorant text-5xl text-gold-500/40 absolute top-1 left-3 leading-none">“</span>
+                <p class="font-cormorant italic text-lg sm:text-xl text-slateprince-800 leading-relaxed">
+                    Señor, hoy que recibo la luz de tu gracia en mi corazón, guía mis pasos como una estrella en el universo y llena mi vida de amor, fe y sabiduría.
+                </p>
+                <footer class="mt-2 font-cinzel text-[11px] tracking-widest text-crimson-700 uppercase">
+                    — Un pequeño príncipe bendecido por Dios —
+                </footer>
+            </blockquote>
+
+            <!-- Fecha destacada -->
+            <div class="mt-8 pt-6 border-t border-gold-400/30 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+                <span class="font-cinzel text-sm sm:text-base tracking-[0.2em] text-slateprince-700 uppercase">Martes</span>
+                <span class="hidden sm:inline text-gold-500">•</span>
+                <div class="px-6 py-2 rounded-full bg-crimson-700 text-cream-50 font-cinzel text-lg sm:text-xl font-semibold tracking-wider shadow-md border border-gold-400">
+                    03 de Enero de 2017
+                </div>
+                <span class="hidden sm:inline text-gold-500">•</span>
+                <span class="font-cinzel text-sm sm:text-base tracking-[0.2em] text-slateprince-700 uppercase">11:30 HRS</span>
+            </div>
+        </section>
+
+        <!-- RETRATO PRINCIPAL DESPUÉS DE LA PORTADA -->
+        <section class="reveal royal-card rounded-[2rem] p-6 sm:p-10 text-center relative overflow-hidden">
+            <div class="max-w-[240px] sm:max-w-[280px] mx-auto relative my-2">
+                <!-- Halo resplandeciente dorado -->
+                <div class="absolute -inset-3 rounded-full bg-gradient-to-tr from-gold-500/30 via-crimson-500/15 to-gold-300/40 blur-md animate-pulse"></div>
+                
+                <!-- Estrellas decorativas alrededor del retrato -->
+                <svg class="w-7 h-7 text-gold-500 absolute -top-3 -left-3 z-20 twinkle drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L14.8 8.8L23 9.5L16.8 14.8L18.8 23L12 18.5L5.2 23L7.2 14.8L1 9.5L9.2 8.8L12 1Z"/>
+                </svg>
+                <svg class="w-5 h-5 text-crimson-600 absolute top-4 -right-4 z-20 twinkle" style="animation-delay: 1.2s;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L14.8 8.8L23 9.5L16.8 14.8L18.8 23L12 18.5L5.2 23L7.2 14.8L1 9.5L9.2 8.8L12 1Z"/>
+                </svg>
+
+                <!-- Marco Circular Doble -->
+                <div class="relative z-10 p-1.5 rounded-full bg-gradient-to-b from-gold-400 via-gold-500 to-crimson-700 shadow-xl">
+                    <div class="p-1 rounded-full bg-cream-50">
+                        <div class="w-52 h-52 sm:w-60 sm:h-60 rounded-full overflow-hidden relative bg-cream-100">
+                            <img src="https://drive.google.com/thumbnail?id=1DWHvCNVEAroOSdH9GElX_PxY2ceABE8P&sz=w1000" 
+                                 onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/1DWHvCNVEAroOSdH9GElX_PxY2ceABE8P=w1000';"
+                                 alt="Rodrigo Fabián Zapién Orozco" 
+                                 class="w-full h-full object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emblema inferior: Mini Rosa Roja y Estrella -->
+                <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 z-20 bg-cream-50 px-3.5 py-1 rounded-full border border-gold-500 shadow-md flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-crimson-600 inline-block"></span>
+                    <span class="font-cinzel text-[10px] tracking-widest text-gold-700 font-bold uppercase">B-612</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-gold-500 inline-block"></span>
+                </div>
+            </div>
+
+            <p class="mt-7 font-cormorant italic text-xl sm:text-2xl text-slateprince-800">
+                "He aquí mi secreto, que no puede ser más simple: solo con el corazón se puede ver bien."
+            </p>
+        </section>
+
+        <!-- 2. FAMILIA Y PADRINOS -->
+        <section class="reveal royal-card rounded-[2rem] p-6 sm:p-10 text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-crimson-700/10 text-crimson-700 mb-3">
+                <i data-lucide="heart" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-crimson-700 tracking-wider uppercase mb-2">
+                Con el amor de mi familia
+            </h3>
+            <p class="font-cormorant italic text-lg text-slateprince-700 mb-8">
+                Quienes me acompañan y guían en este día tan especial
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <!-- Mis Papás -->
+                <div class="bg-cream-50/90 border border-gold-400/40 rounded-2xl p-6 relative group hover:border-gold-500 transition-colors">
+                    <div class="w-10 h-10 mx-auto mb-3 rounded-full bg-gold-500/15 flex items-center justify-center text-gold-700">
+                        <i data-lucide="crown" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-cinzel text-xs tracking-[0.25em] text-gold-700 uppercase font-bold mb-3">
+                        Mis Papás
+                    </h4>
+                    <div class="space-y-1.5 font-cormorant text-xl sm:text-2xl font-semibold text-slateprince-800">
+                        <p>Rodrigo Fabián Zapién Martínez</p>
+                        <p class="text-crimson-600 text-base font-normal">&amp;</p>
+                        <p>Teresa Orozco Ayala</p>
+                    </div>
+                </div>
+
+                <!-- Mis Padrinos -->
+                <div class="bg-cream-50/90 border border-gold-400/40 rounded-2xl p-6 relative group hover:border-gold-500 transition-colors">
+                    <div class="w-10 h-10 mx-auto mb-3 rounded-full bg-crimson-700/10 flex items-center justify-center text-crimson-700">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-cinzel text-xs tracking-[0.25em] text-crimson-700 uppercase font-bold mb-3">
+                        Mis Padrinos
+                    </h4>
+                    <div class="space-y-1.5 font-cormorant text-xl sm:text-2xl font-semibold text-slateprince-800">
+                        <p>Jaime Eduardo Zapién Martínez</p>
+                        <p class="text-gold-600 text-base font-normal">&amp;</p>
+                        <p>María de Jesús Ceja Espinoza</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CEREMONIA RELIGIOSA Y RECEPCIÓN -->
+        <section class="reveal space-y-6">
+            <div class="text-center">
+                <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-crimson-700 tracking-wider uppercase">
+                    ¿Dónde y Cuándo?
+                </h3>
+                <p class="font-cormorant italic text-lg text-slateprince-700">
+                    Acompáñanos a celebrar este sacramento de amor
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tarjeta Ceremonia Religiosa -->
+                <div class="royal-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between text-center border-t-4 border-t-crimson-700">
+                    <div>
+                        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-crimson-700 text-cream-50 flex items-center justify-center shadow-md">
+                            <i data-lucide="church" class="w-7 h-7 text-gold-300"></i>
+                        </div>
+                        <span class="font-cinzel text-xs tracking-[0.2em] text-gold-700 uppercase font-semibold">Ceremonia Religiosa</span>
+                        <h4 class="font-cormorant text-2xl sm:text-3xl font-bold text-slateprince-800 mt-1 mb-3">
+                            Parroquia del Sagrado Corazón
+                        </h4>
+                        
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cream-200/80 text-crimson-800 font-cinzel text-sm font-semibold mb-4">
+                            <i data-lucide="clock" class="w-4 h-4 text-crimson-700"></i>
+                            <span>11:30 AM</span>
+                        </div>
+
+                        <p class="text-sm text-slateprince-700 leading-relaxed mb-6">
+                            Sahuayo de Morelos, Michoacán.<br>
+                            <span class="text-xs text-slate-500 italic">(Te sugerimos llegar 15 minutos antes)</span>
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=Parroquia+del+Sagrado+Corazon+Sahuayo+Michoacan" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-5 rounded-xl bg-cream-100 hover:bg-crimson-700 text-crimson-700 hover:text-cream-50 border border-crimson-700/30 font-cinzel text-xs tracking-widest uppercase font-semibold transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        Ver en Google Maps
+                    </a>
+                </div>
+
+                <!-- Tarjeta Recepción -->
+                <div class="royal-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between text-center border-t-4 border-t-gold-500">
+                    <div>
+                        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gold-500 text-white flex items-center justify-center shadow-md">
+                            <i data-lucide="wine" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-cinzel text-xs tracking-[0.2em] text-crimson-700 uppercase font-semibold">Recepción &amp; Festejo</span>
+                        <h4 class="font-cormorant text-2xl sm:text-3xl font-bold text-slateprince-800 mt-1 mb-3">
+                            Jardín de Eventos Valentína
+                        </h4>
+                        
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cream-200/80 text-gold-700 font-cinzel text-sm font-semibold mb-4">
+                            <i data-lucide="clock" class="w-4 h-4 text-gold-600"></i>
+                            <span>2:00 PM</span>
+                        </div>
+
+                        <p class="text-sm text-slateprince-700 leading-relaxed mb-6">
+                            Guadalajara 253, Col. Guadalajara,<br>
+                            C.P. 59058, Sahuayo de Morelos, Mich.
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=Guadalajara+253,+Guadalajara,+59058+Sahuayo+de+Morelos,+Mich." target="_blank" rel="noopener noreferrer" class="w-full py-3 px-5 rounded-xl bg-cream-100 hover:bg-gold-600 text-gold-700 hover:text-white border border-gold-500/40 font-cinzel text-xs tracking-widest uppercase font-semibold transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                        Cómo llegar al Jardín
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ITINERARIO DEL DÍA -->
+        <section class="reveal royal-card rounded-[2rem] p-6 sm:p-10">
+            <div class="text-center mb-8">
+                <span class="font-cinzel text-xs tracking-[0.25em] text-gold-700 uppercase font-semibold">Paso a Paso</span>
+                <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-crimson-700 tracking-wider uppercase mt-1">
+                    Itinerario de Celebración
+                </h3>
+            </div>
+
+            <div class="max-w-lg mx-auto relative">
+                <!-- Línea vertical dorada -->
+                <div class="absolute left-6 sm:left-1/2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-crimson-600 via-gold-500 to-crimson-600 transform sm:-translate-x-1/2"></div>
+
+                <div class="space-y-8">
+                    <!-- Hito 1 -->
+                    <div class="relative flex items-center sm:justify-between">
+                        <div class="hidden sm:block w-5/12 text-right pr-6">
+                            <p class="font-cinzel font-bold text-crimson-700 text-base">11:30 AM</p>
+                            <p class="text-xs text-slate-500">Parroquia del Sagrado Corazón</p>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-cream-50 border-2 border-crimson-700 flex items-center justify-center text-crimson-700 shadow-sm shrink-0">
+                            <i data-lucide="droplets" class="w-5 h-5"></i>
+                        </div>
+                        <div class="pl-5 sm:pl-6 sm:w-5/12">
+                            <p class="sm:hidden font-cinzel font-bold text-crimson-700 text-sm">11:30 AM</p>
+                            <h4 class="font-cormorant text-xl font-bold text-slateprince-800">Ceremonia Bautismal</h4>
+                            <p class="text-xs text-slateprince-700">Bendición y sacramento del bautismo (Misa 12:00 PM)</p>
+                        </div>
+                    </div>
+
+                    <!-- Hito 2 -->
+                    <div class="relative flex items-center sm:justify-between">
+                        <div class="hidden sm:block w-5/12 text-right pr-6">
+                            <h4 class="font-cormorant text-xl font-bold text-slateprince-800">Recepción de Invitados</h4>
+                            <p class="text-xs text-slateprince-700">Bienvenida en Jardín Valentína</p>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-cream-50 border-2 border-gold-500 flex items-center justify-center text-gold-600 shadow-sm shrink-0">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </div>
+                        <div class="pl-5 sm:pl-6 sm:w-5/12">
+                            <p class="font-cinzel font-bold text-gold-700 text-sm sm:text-base">2:00 PM</p>
+                            <h4 class="sm:hidden font-cormorant text-xl font-bold text-slateprince-800">Recepción de Invitados</h4>
+                            <p class="sm:hidden text-xs text-slateprince-700">Bienvenida en Jardín Valentína</p>
+                        </div>
+                    </div>
+
+                    <!-- Hito 3 -->
+                    <div class="relative flex items-center sm:justify-between">
+                        <div class="hidden sm:block w-5/12 text-right pr-6">
+                            <p class="font-cinzel font-bold text-crimson-700 text-base">3:00 PM</p>
+                            <p class="text-xs text-slate-500">Convivencia y alegría</p>
+                        </div>
+                        <div class="z-10 w-12 h-12 rounded-full bg-cream-50 border-2 border-crimson-700 flex items-center justify-center text-crimson-700 shadow-sm shrink-0">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
+                        </div>
+                        <div class="pl-5 sm:pl-6 sm:w-5/12">
+                            <p class="sm:hidden font-cinzel font-bold text-crimson-700 text-sm">3:00 PM</p>
+                            <h4 class="font-cormorant text-xl font-bold text-slateprince-800">Comida / Banquete</h4>
+                            <p class="text-xs text-slateprince-700">Compartimos la mesa y celebramos juntos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. GALERÍA DE RECUERDOS (4 Fotografía con estética de cuento) -->
+        <section class="reveal royal-card rounded-[2rem] p-6 sm:p-10">
+            <div class="text-center mb-8">
+                <span class="font-cinzel text-xs tracking-[0.25em] text-gold-700 uppercase font-semibold">Pequeños Momentos</span>
+                <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-crimson-700 tracking-wider uppercase mt-1">
+                    Galería de Rodrigo Fabián
+                </h3>
+                <p class="font-cormorant italic text-lg text-slateprince-700 mt-1">
+                    "Todas las personas mayores fueron al principio niños..."
+                </p>
+            </div>
+
+            <!-- Grid de 4 fotografías con marcos dorados y fallback elegante -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <!-- Foto 1 -->
+                <div class="group relative rounded-2xl overflow-hidden border-2 border-gold-400/50 bg-cream-100 aspect-[4/3] shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80" 
+                         onerror="this.src='https://placehold.co/800x600/FDF8EE/8C6D16?text=Rodrigo+Fabi%C3%A1n+1'"
+                         alt="Rodrigo Fabián - Foto 1" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span class="text-cream-50 font-cormorant italic text-lg">Nuestro pequeño príncipe</span>
+                    </div>
+                </div>
+
+                <!-- Foto 2 -->
+                <div class="group relative rounded-2xl overflow-hidden border-2 border-gold-400/50 bg-cream-100 aspect-[4/3] shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=800&q=80" 
+                         onerror="this.src='https://placehold.co/800x600/FDF8EE/8C6D16?text=Rodrigo+Fabi%C3%A1n+2'"
+                         alt="Rodrigo Fabián - Foto 2" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span class="text-cream-50 font-cormorant italic text-lg">Iluminando nuestro universo</span>
+                    </div>
+                </div>
+
+                <!-- Foto 3 -->
+                <div class="group relative rounded-2xl overflow-hidden border-2 border-gold-400/50 bg-cream-100 aspect-[4/3] shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1544126592-807ade215a0b?auto=format&fit=crop&w=800&q=80" 
+                         onerror="this.src='https://placehold.co/800x600/FDF8EE/8C6D16?text=Rodrigo+Fabi%C3%A1n+3'"
+                         alt="Rodrigo Fabián - Foto 3" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span class="text-cream-50 font-cormorant italic text-lg">Amor de familia</span>
+                    </div>
+                </div>
+
+                <!-- Foto 4 -->
+                <div class="group relative rounded-2xl overflow-hidden border-2 border-gold-400/50 bg-cream-100 aspect-[4/3] shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=800&q=80" 
+                         onerror="this.src='https://placehold.co/800x600/FDF8EE/8C6D16?text=Rodrigo+Fabi%C3%A1n+4'"
+                         alt="Rodrigo Fabián - Foto 4" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <span class="text-cream-50 font-cormorant italic text-lg">Un nuevo comienzo en la fe</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-xs text-slate-400 mt-4 italic">
+                * Puedes reemplazar estas imágenes ilustrativas con las fotografías oficiales de Rodrigo Fabián.
+            </p>
+        </section>
+
+        <!-- 6. DETALLES ADICIONALES (Código de vestimenta y Sugerencia de regalos) -->
+        <section class="reveal grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Código de Vestimenta -->
+            <div class="royal-card rounded-[2rem] p-6 sm:p-8 text-center flex flex-col items-center justify-center">
+                <div class="w-14 h-14 rounded-full bg-gold-500/15 text-gold-700 flex items-center justify-center mb-4">
+                    <i data-lucide="shirt" class="w-7 h-7"></i>
+                </div>
+                <span class="font-cinzel text-xs tracking-[0.2em] text-gold-700 uppercase font-semibold">Código de Vestimenta</span>
+                <h4 class="font-cormorant text-3xl font-bold text-crimson-700 mt-1 mb-2">Formal</h4>
+                <p class="text-sm text-slateprince-700 max-w-xs">
+                    Te invitamos a vestir de etiqueta formal para acompañarnos en esta ocasión tan especial.
+                </p>
+            </div>
+
+            <!-- Sugerencia de Regalos -->
+            <div class="royal-card rounded-[2rem] p-6 sm:p-8 text-center flex flex-col items-center justify-center">
+                <div class="w-14 h-14 rounded-full bg-crimson-700/10 text-crimson-700 flex items-center justify-center mb-4">
+                    <i data-lucide="gift" class="w-7 h-7"></i>
+                </div>
+                <span class="font-cinzel text-xs tracking-[0.2em] text-crimson-700 uppercase font-semibold">Detalle de Cariño</span>
+                <h4 class="font-cormorant text-3xl font-bold text-slateprince-800 mt-1 mb-2">Tu presencia es mi mejor regalo</h4>
+                <p class="text-sm text-slateprince-700 max-w-xs">
+                    Si deseas tener un detalle conmigo, será recibido con mucho amor y gratitud en el evento.
+                </p>
+            </div>
+        </section>
+
+        <!-- 7. CONFIRMACIÓN DE ASISTENCIA (RSVP) -->
+        <section class="reveal royal-card rounded-[2rem] p-6 sm:p-12 text-center relative overflow-hidden border-2 border-gold-500/60">
+            <!-- Fondo sutil decorativo -->
+            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-gold-400/10 blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-crimson-600/10 blur-2xl pointer-events-none"></div>
+
+            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-crimson-700/10 text-crimson-700 font-cinzel text-xs tracking-widest uppercase font-semibold mb-4">
+                <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                <span>Confirmación de Asistencia</span>
+            </div>
+
+            <h3 class="font-cormorant text-3xl sm:text-4xl font-bold text-slateprince-800 mb-3">
+                ¿Nos acompañas en este día mágico?
+            </h3>
+            
+            <p class="text-sm sm:text-base text-slateprince-700 max-w-md mx-auto mb-8">
+                Por favor confírmanos tu asistencia antes del <strong class="text-crimson-700 font-semibold">15 de diciembre</strong> para preparar tu lugar con mucho cariño.
+            </p>
+
+            <!-- Botón Directo a WhatsApp -->
+            <button onclick="sendWhatsAppRSVP()" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-crimson-700 via-crimson-600 to-crimson-700 text-cream-50 font-cinzel text-sm tracking-widest uppercase font-semibold shadow-xl shadow-crimson-700/25 hover:scale-[1.02] active:scale-[0.98] transition-all border border-gold-400 cursor-pointer">
+                <i data-lucide="message-circle" class="w-5 h-5 text-gold-300"></i>
+                Confirmar por WhatsApp
+            </button>
+
+            <p class="mt-4 text-xs text-slate-500">
+                Contacto directo: <a href="https://wa.me/523511608300" target="_blank" rel="noopener noreferrer" class="font-semibold text-gold-700 hover:underline">351 160 8300</a>
+            </p>
+
+            <!-- Mensaje de notificación integrado (sin alert) -->
+            <div id="rsvp-toast" class="hidden mt-4 p-3 rounded-xl bg-gold-500/20 border border-gold-500 text-slateprince-800 text-xs font-medium">
+                Abriendo WhatsApp para enviar tu confirmación...
+            </div>
+        </section>
+
+        <!-- PIE DE PÁGINA -->
+        <footer class="text-center pb-8 pt-4 space-y-3">
+            <div class="flex justify-center items-center gap-2 text-gold-600">
+                <span class="h-[1px] w-10 bg-gold-400"></span>
+                <i data-lucide="star" class="w-4 h-4 fill-gold-500"></i>
+                <span class="h-[1px] w-10 bg-gold-400"></span>
+            </div>
+            <p class="font-cormorant italic text-xl text-crimson-700">
+                "Fue el tiempo que pasaste con tu rosa lo que la hizo tan importante."
+            </p>
+            <p class="font-cinzel text-xs tracking-[0.25em] text-slate-500 uppercase">
+                Bautizo de Rodrigo Fabián • 03.01.2017
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Inicializar iconos Lucide
+        lucide.createIcons();
+
+        // ==========================================
+        // 1. ENTRADA Y MÚSICA AMBIENTAL (TONE.JS)
+        // ==========================================
+        let isPlaying = false;
+        let musicLoop = null;
+        let synth = null;
+
+        function initMusic() {
+            if (synth) return;
+            synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.4, decay: 0.8, sustain: 0.3, release: 2.5 }
+            }).toDestination();
+            synth.volume.value = -14;
+
+            // Melodía suave estilo caja de música / cuento de estrellas
+            const notes = [
+                { time: "0:0", note: "E5", dur: "4n" },
+                { time: "0:1", note: "G5", dur: "4n" },
+                { time: "0:2", note: "B5", dur: "2n" },
+                { time: "1:0", note: "A5", dur: "4n" },
+                { time: "1:1", note: "G5", dur: "4n" },
+                { time: "1:2", note: "E5", dur: "2n" },
+                { time: "2:0", note: "D5", dur: "4n" },
+                { time: "2:1", note: "F#5", dur: "4n" },
+                { time: "2:2", note: "A5", dur: "2n" },
+                { time: "3:0", note: "G5", dur: "2n" },
+                { time: "3:2", note: "B4", dur: "2n" }
+            ];
+
+            musicLoop = new Tone.Part((time, val) => {
+                synth.triggerAttackRelease(val.note, val.dur, time);
+            }, notes);
+            musicLoop.loop = true;
+            musicLoop.loopEnd = "4m";
+        }
+
+        async function enterInvitation() {
+            const overlay = document.getElementById('welcome-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 700);
+            
+            try {
+                await Tone.start();
+                initMusic();
+                Tone.Transport.bpm.value = 78;
+                Tone.Transport.start();
+                musicLoop.start(0);
+                isPlaying = true;
+                updateMusicUI();
+            } catch (e) {
+                console.log("Audio esperando interacción del usuario");
+            }
+            checkScrollReveal();
+        }
+
+        async function toggleMusic() {
+            try {
+                await Tone.start();
+                initMusic();
+                if (!isPlaying) {
+                    Tone.Transport.bpm.value = 78;
+                    Tone.Transport.start();
+                    musicLoop.start(0);
+                    isPlaying = true;
+                } else {
+                    Tone.Transport.pause();
+                    isPlaying = false;
+                }
+                updateMusicUI();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function updateMusicUI() {
+            const icon = document.getElementById('music-icon');
+            const waves = document.getElementById('music-waves');
+            if (isPlaying) {
+                icon.setAttribute('data-lucide', 'volume-2');
+                waves.classList.remove('hidden');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-x');
+                waves.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // 2. ANIMACIÓN DE HOJAS DORADAS/ROJAS Y BRILLOS
+        // ==========================================
+        const canvas = document.getElementById('magic-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class MagicParticle {
+            constructor() {
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = initial ? Math.random() * canvas.height : -20;
+                this.isLeaf = Math.random() > 0.35; // 65% hojas, 35% destellos dorados
+                this.size = this.isLeaf ? (Math.random() * 7 + 6) : (Math.random() * 2.5 + 1.5);
+                this.speedY = this.isLeaf ? (Math.random() * 1.1 + 0.5) : (Math.random() * 0.6 + 0.2);
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.swayAngle = Math.random() * Math.PI * 2;
+                this.swaySpeed = Math.random() * 0.02 + 0.01;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+                
+                // Paleta dorada y rojo carmesí
+                const leafColors = [
+                    'rgba(212, 175, 55, 0.65)',  // Dorado clásico
+                    'rgba(229, 193, 88, 0.7)',   // Dorado claro
+                    'rgba(181, 144, 36, 0.6)',   // Dorado envejecido
+                    'rgba(167, 29, 42, 0.55)',   // Rojo carmesí
+                    'rgba(200, 35, 51, 0.5)'     // Rojo rosa
+                ];
+                this.color = this.isLeaf 
+                    ? leafColors[Math.floor(Math.random() * leafColors.length)]
+                    : 'rgba(229, 193, 88, 0.85)';
+                this.twinklePhase = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.swayAngle += this.swaySpeed;
+                this.x += this.speedX + Math.sin(this.swayAngle) * 0.7;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+                this.twinklePhase += 0.06;
+
+                if (this.y > canvas.height + 25 || this.x < -30 || this.x > canvas.width + 30) {
+                    this.reset(false);
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                if (this.isLeaf) {
+                    ctx.rotate(this.rotation);
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    // Forma orgánica de hoja de árbol
+                    ctx.moveTo(0, -this.size);
+                    ctx.bezierCurveTo(this.size * 0.8, -this.size * 0.4, this.size * 0.8, this.size * 0.4, 0, this.size);
+                    ctx.bezierCurveTo(-this.size * 0.8, this.size * 0.4, -this.size * 0.8, -this.size * 0.4, 0, -this.size);
+                    ctx.fill();
+
+                    // Nervadura central sutil
+                    ctx.strokeStyle = 'rgba(255, 253, 249, 0.35)';
+                    ctx.lineWidth = 0.6;
+                    ctx.beginPath();
+                    ctx.moveTo(0, -this.size * 0.7);
+                    ctx.lineTo(0, this.size * 0.7);
+                    ctx.stroke();
+                } else {
+                    // Brillo dorado tipo estrella
+                    const alpha = 0.35 + Math.abs(Math.sin(this.twinklePhase)) * 0.65;
+                    ctx.fillStyle = `rgba(212, 175, 55, ${alpha})`;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = '#E5C158';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            const count = window.innerWidth < 640 ? 28 : 45;
+            particles = Array.from({ length: count }, () => new MagicParticle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        // ==========================================
+        // 3. CONFIRMACIÓN DIRECTA POR WHATSAPP (RSVP)
+        // ==========================================
+        function sendWhatsAppRSVP() {
+            const toast = document.getElementById('rsvp-toast');
+            const phone = '523511608300'; // Número de contacto directo
+
+            const message = `¡Hola! Confirmo con mucho gusto mi asistencia para el *Bautizo de Rodrigo Fabián Zapién Orozco* el 03 de enero.\n\n` +
+                            `👤 *Nombre/Familia:* \n` +
+                            `👥 *Número de personas:* \n\n` +
+                            `¡Muchas gracias por la invitación!`;
+
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // ==========================================
+        // 4. ANIMACIÓN DE APARICIÓN AL HACER SCROLL
+        // ==========================================
+        function checkScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const triggerBottom = window.innerHeight * 0.88;
+
+            reveals.forEach(el => {
+                const top = el.getBoundingClientRect().top;
+                if (top < triggerBottom) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkScrollReveal);
+
+        window.onload = function() {
+            initParticles();
+            animateParticles();
+            checkScrollReveal();
+        };
+    </script>
+</body>
+</html>
